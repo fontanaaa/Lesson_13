@@ -1,47 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useHistory } from "react-router";
 import { useParams } from "react-router";
 import QualityForm from "../components/ui/qualityForm";
-import quailityService from "../services/quality.service";
-import { toast } from "react-toastify";
+import { useQualities } from "../hooks/useQualities";
 
 const EditQualityPage = () => {
-  const [quality, setQuality] = useState(null);
+  const history = useHistory();
   const id = useParams().id;
-
-  const updateQuality = async (content) => {
-    try {
-      const data = await quailityService.update(id, content);
-      return data.content;
-    } catch (error) {
-      const { message } = error.response.data;
-      toast.error(message);
-    }
-  };
-
-  const getQuality = async (id) => {
-    try {
-      const data = await quailityService.get(id);
-      return data.content;
-    } catch (error) {
-      const { message } = error.response.data;
-      toast.error(message);
-    }
-  };
+  const { getQuality, updateQuality } = useQualities();
+  const quality = getQuality(id);
 
   const handleSumbit = (data) => {
-    updateQuality(data);
+    console.log(data);
+    updateQuality(data).then((data) => {
+      if (data) history.push("/");
+    });
   };
-  useEffect(() => {
-    getQuality(id).then((data) => setQuality(data));
-  }, []);
+
   return (
     <>
       <h1>Edit Quality Page</h1>{" "}
-      {quality !== null ? (
-        <QualityForm data={quality} onSubmit={handleSumbit} />
-      ) : (
-        "Loading..."
-      )}
+      <QualityForm data={quality} onSubmit={handleSumbit} />
     </>
   );
 };

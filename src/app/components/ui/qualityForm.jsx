@@ -4,8 +4,8 @@ import TextField from "../common/form/textField";
 import colors from "../../constants/colors.json";
 import useForm from "../../hooks/useForm";
 
-const QualityForm = ({ onSubmit }) => {
-  const { form, handleSumbit, handleChange } = useForm({}, onSubmit);
+const QualityForm = ({ onSubmit, data }) => {
+  const { form, handleSumbit, handleChange } = useForm(data, onSubmit);
 
   return (
     <form onSubmit={handleSumbit}>
